@@ -1,0 +1,520 @@
+definitions:
+  errcode.Error:
+    properties:
+      code:
+        type: integer
+      details:
+        items:
+          type: string
+        type: array
+      msg:
+        type: string
+    type: object
+  model.Article:
+    properties:
+      content:
+        type: string
+      cover_image_url:
+        type: string
+      created_by:
+        type: string
+      created_on:
+        type: integer
+      desc:
+        type: string
+      id:
+        type: integer
+      is_del:
+        type: integer
+      modified_by:
+        type: string
+      modified_on:
+        type: integer
+      state:
+        type: integer
+      title:
+        type: string
+    type: object
+  model.Tag:
+    properties:
+      created_by:
+        type: string
+      created_on:
+        type: integer
+      id:
+        type: integer
+      is_del:
+        type: integer
+      modified_by:
+        type: string
+      modified_on:
+        type: integer
+      name:
+        type: string
+      state:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Go - Simple-Blog-Service
+  license: {}
+  title: 部落格系統
+  version: "1.0"
+paths:
+  /api/v1/articles:
+    get:
+      parameters:
+      - description: 文章標題
+        in: query
+        maxLength: 100
+        name: title
+        type: string
+      - description: 標籤 ID
+        in: query
+        name: tag_id
+        required: true
+        type: integer
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: query
+        name: state
+        type: integer
+      - description: 頁碼
+        in: query
+        name: page
+        type: integer
+      - description: 每頁數量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 取得多個文章
+  /api/v1/articles/{id}:
+    delete:
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 刪除文章
+    get:
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 取得特定文章
+    post:
+      parameters:
+      - description: 標籤 ID
+        in: body
+        name: tag_id
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      - description: 文章標題
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: title
+        required: true
+        schema:
+          type: string
+      - description: 文章簡述
+        in: body
+        maxLength: 255
+        name: desc
+        schema:
+          type: string
+      - description: 文章內容
+        in: body
+        maxLength: 4294967295
+        minLength: 1
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: 封面圖片位址
+        in: body
+        name: cover_image_url
+        required: true
+        schema:
+          type: string
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 建立者
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: created_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Article'
+            type: array
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 新增文章
+    put:
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 標籤 ID
+        in: body
+        name: tag_id
+        schema:
+          type: integer
+      - description: 文章標題
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: title
+        schema:
+          type: string
+      - description: 文章簡述
+        in: body
+        maxLength: 255
+        name: desc
+        schema:
+          type: string
+      - description: 文章內容
+        in: body
+        maxLength: 4294967295
+        minLength: 1
+        name: content
+        schema:
+          type: string
+      - description: 封面圖片位址
+        in: body
+        name: cover_image_url
+        schema:
+          type: string
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 修改者
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Article'
+            type: array
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 更新文章
+  /api/v1/tags:
+    get:
+      parameters:
+      - description: 標籤名稱
+        in: query
+        maxLength: 100
+        minLength: 1
+        name: name
+        type: string
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: query
+        name: state
+        type: integer
+      - description: 頁碼
+        in: query
+        name: page
+        type: integer
+      - description: 每頁數量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 取得多個標籤
+    post:
+      parameters:
+      - description: 標籤名稱
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: name
+        required: true
+        schema:
+          type: string
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 建立者
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: created_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 新增標籤
+  /api/v1/tags/:id:
+    get:
+      parameters:
+      - description: 標籤 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 取得特定標籤
+  /api/v1/tags/{id}:
+    delete:
+      parameters:
+      - description: 標籤 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 刪除標籤
+    put:
+      parameters:
+      - description: 標籤 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 標籤名稱
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: name
+        schema:
+          type: string
+      - default: 1
+        description: 狀態
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 建立者
+        in: body
+        maxLength: 100
+        minLength: 1
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Tag'
+            type: array
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 更新標籤
+  /auth:
+    post:
+      parameters:
+      - description: 使用者帳號
+        in: header
+        name: user
+        required: true
+        type: string
+      - description: 使用者密碼
+        in: header
+        name: password
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: Object
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 取得 Token
+swagger: "2.0"

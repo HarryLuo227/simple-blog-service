@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  # sudo docker run --name=test-db57 -d -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -p 33060:33060 mysql:5.7
+  mysql:
+    image: mysql:5.7
+    container_name: test-db57
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 3306:3306
+      - 33060:33060
+    volumes:
+      - ./tmp/all-databases.sql:/docker-entrypoint-initdb.d/all-databases.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  # docker run --name=test-jaeger -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -d \
+  # -p 5775:5775/udp \
+  # -p 6831:6831/udp \
+  # -p 6832:6832/udp \
+  # -p 5778:5778 \
+  # -p 16686:16686 \
+  # -p 14268:14268 \
+  # -p 9411:9411 \
+  # jaegertracing/all-in-one:1.16
+  jaeger:
+    image: jaegertracing/all-in-one:1.16
+    container_name: test-jaeger
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 9411:9411
+  # sudo docker run --name=app -d -p 8000:8000 simple-blog-service
+  app:
+    image: simple-blog-service:latest
+    container_name: app
+    ports:
+      - 8000:8000
+    depends_on:
+      mysql:
+        condition: service_healthy

@@ -1,0 +1,778 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Go - Simple-Blog-Service",
+        "title": "部落格系統",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/articles": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取得多個文章",
+                "parameters": [
+                    {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "文章標題",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "標籤 ID",
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "type": "integer",
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁碼",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每頁數量",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取得特定文章",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "更新文章",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "標籤 ID",
+                        "name": "tag_id",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "文章標題",
+                        "name": "title",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "maxLength": 255,
+                        "description": "文章簡述",
+                        "name": "desc",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "maxLength": 4294967295,
+                        "minLength": 1,
+                        "description": "文章內容",
+                        "name": "content",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "封面圖片位址",
+                        "name": "cover_image_url",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "修改者",
+                        "name": "modified_by",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Article"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增文章",
+                "parameters": [
+                    {
+                        "description": "標籤 ID",
+                        "name": "tag_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "文章標題",
+                        "name": "title",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "maxLength": 255,
+                        "description": "文章簡述",
+                        "name": "desc",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "maxLength": 4294967295,
+                        "minLength": 1,
+                        "description": "文章內容",
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "封面圖片位址",
+                        "name": "cover_image_url",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "建立者",
+                        "name": "created_by",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Article"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "刪除文章",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tags": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取得多個標籤",
+                "parameters": [
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "標籤名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "type": "integer",
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁碼",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每頁數量",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增標籤",
+                "parameters": [
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "標籤名稱",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "建立者",
+                        "name": "created_by",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tags/:id": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取得特定標籤",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "標籤 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tags/{id}": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "更新標籤",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "標籤 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "標籤名稱",
+                        "name": "name",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "default": 1,
+                        "description": "狀態",
+                        "name": "state",
+                        "in": "body",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "description": "建立者",
+                        "name": "modified_by",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Tag"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "刪除標籤",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "標籤 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取得 Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "使用者帳號",
+                        "name": "user",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "使用者密碼",
+                        "name": "password",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "400": {
+                        "description": "請求錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    },
+                    "500": {
+                        "description": "內部錯誤",
+                        "schema": {
+                            "type": "Object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "errcode.Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Article": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "cover_image_url": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "created_on": {
+                    "type": "integer"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_del": {
+                    "type": "integer"
+                },
+                "modified_by": {
+                    "type": "string"
+                },
+                "modified_on": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Tag": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "type": "string"
+                },
+                "created_on": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_del": {
+                    "type": "integer"
+                },
+                "modified_by": {
+                    "type": "string"
+                },
+                "modified_on": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
