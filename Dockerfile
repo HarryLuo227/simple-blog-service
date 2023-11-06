@@ -9,4 +9,4 @@ FROM ubuntu:22.04
 WORKDIR /root
 COPY --from=builder /go/src/simple-blog-service .
 EXPOSE 8000
-ENTRYPOINT [ "./simple-blog-service" ]
+ENTRYPOINT [ "./simple-blog-service", "-config", "configs/containeruse/" ]
