@@ -485,7 +485,7 @@
                 }
             }
         },
-        "/api/v1/tags/:id": {
+        "/api/v1/tags/{id}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -533,9 +533,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/tags/{id}": {
+            },
             "put": {
                 "produces": [
                     "application/json"

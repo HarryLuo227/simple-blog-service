@@ -382,7 +382,30 @@ paths:
           schema:
             type: Object
       summary: 新增標籤
-  /api/v1/tags/:id:
+  /api/v1/tags/{id}:
+    delete:
+      parameters:
+      - description: 標籤 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 請求錯誤
+          schema:
+            type: Object
+        "500":
+          description: 內部錯誤
+          schema:
+            type: Object
+      summary: 刪除標籤
     get:
       parameters:
       - description: 標籤 ID
@@ -415,30 +438,6 @@ paths:
           schema:
             type: Object
       summary: 取得特定標籤
-  /api/v1/tags/{id}:
-    delete:
-      parameters:
-      - description: 標籤 ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功
-          schema:
-            type: string
-        "400":
-          description: 請求錯誤
-          schema:
-            type: Object
-        "500":
-          description: 內部錯誤
-          schema:
-            type: Object
-      summary: 刪除標籤
     put:
       parameters:
       - description: 標籤 ID

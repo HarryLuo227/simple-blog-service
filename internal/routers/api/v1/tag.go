@@ -66,7 +66,7 @@ func (t Tag) List(c *gin.Context) {
 // @Success 200 {Object} model.Tag "成功"
 // @Failure 400 {Object} errcode.Error "請求錯誤"
 // @Failure 500 {Object} errcode.Error "內部錯誤"
-// @Router /api/v1/tags/:id [get]
+// @Router /api/v1/tags/{id} [get]
 func (t Tag) Get(c *gin.Context) {
 	param := service.GetTagRequest{
 		ID: convert.StrTo(c.Param("id")).MustUInt32(),
